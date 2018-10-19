@@ -1,0 +1,10 @@
+{
+    "name": "eduard/mvc",
+    "authors": [
+        {
+            "name": "Eduard Korolev",
+            "email": "karevseo@mail.ru"
+        }
+    ],
+    "require": {}
+}
