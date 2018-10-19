@@ -23,16 +23,21 @@ class Application extends Object
             'className' => \App\Core\Component\Db\Mysql::class,
             'options' => []
         ],
-
-        'view' => [
-            'className' => \App\Core\Component\View\View::class,
-            'options' => []
-        ]
     ];
 
     public function getRouter()
     {
         return $this->get('router');
+    }
+
+    public function getViewPath()
+    {
+        return $this->getBasePath() . 'views';
+    }
+
+    public function getBasePath()
+    {
+        return ROOT_PATH;
     }
 
     public function get($id)

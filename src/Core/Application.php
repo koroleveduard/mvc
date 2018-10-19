@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\Exception\NotFoundException;
 use App\Core\Helper\ArrayHelper;
 use App\Core\Base\Application as BaseApplication;
 
@@ -41,6 +42,11 @@ class Application extends BaseApplication
     {
         $controllerName = ucfirst($controller).'Controller';
         $controllerClassName = $this->controllerNamespace.'\\'.$controllerName;
+
+        if (!class_exists($controllerClassName)) {
+            throw new NotFoundException("Controller $controllerClassName is not found!");
+        }
+
         return new $controllerClassName();
     }
 }

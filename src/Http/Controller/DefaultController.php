@@ -8,6 +8,13 @@ class DefaultController extends Controller
 {
     public function actionIndex()
     {
-        return 'ACTION RUN!';
+        $responce = $this->render('default.index');
+        return $responce;
+    }
+
+    public function actionLogin()
+    {
+        $responce = $this->render('default.login');
+        return $responce;
     }
 }
