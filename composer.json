@@ -6,5 +6,9 @@
             "email": "karevseo@mail.ru"
         }
     ],
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
 }
