@@ -7,7 +7,7 @@ use App\Http\Entity\User;
 
 class UserService
 {
-    public function writeOff(User $user, $sum)
+    public function writeOff(User $user, $sum): void
     {
         $connection = Application::$app->getDb()->getConnection();
 
@@ -33,7 +33,7 @@ class UserService
         $connection->commit();
     }
 
-    protected function getAndLockCurrentBalance(User $user, $connection)
+    protected function getAndLockCurrentBalance(User $user, $connection): int
     {
         $sqlBalance = "SELECT balance FROM users WHERE id = :id FOR UPDATE";
         $sth = $connection->prepare($sqlBalance);

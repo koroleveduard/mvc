@@ -6,12 +6,13 @@ class Controller
 {
     const ACTION_PREFIX = 'action';
 
+    /** @var  View */
     protected $view;
 
     protected $layout = 'layout.main';
 
+    /** @var  Request */
     protected $request;
-
 
     public function getRequest(): ?Request
     {
@@ -23,7 +24,7 @@ class Controller
         $this->request = $request;
     }
 
-    public function getView()
+    public function getView(): View
     {
         if ($this->view === null) {
             $this->view = new View();
@@ -34,17 +35,19 @@ class Controller
     public function runAction($action)
     {
         $actionName = self::ACTION_PREFIX.ucfirst($action);
-        if (method_exists($this, $actionName)) {
-            return $this->$actionName();
+        if (!method_exists($this, $actionName)) {
+            throw new \RuntimeException("action $action is not found!");
         }
+
+        return $this->$actionName();
     }
 
-    protected function render($view, $params = [])
+    protected function render(string $view, array $params = [])
     {
         return $this->getView()->render($this->layout, $view, $params);
     }
 
-    protected function redirect($path)
+    protected function redirect(string $path)
     {
         header("location: $path");
         exit();

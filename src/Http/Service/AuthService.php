@@ -17,7 +17,6 @@ class AuthService
 
     public function login($identity, $credentials): void
     {
-        /** @var User $user */
         $user = User::findOneBy([
             'username' => $identity
         ]);
@@ -32,6 +31,13 @@ class AuthService
 
         $this->session->write($user);
         $this->session->close();
+    }
+
+    public function logout()
+    {
+        $this->session->unset('user');
+        $this->session->close();
+        $this->user = null;
     }
 
     public function getIdentity() : ?User

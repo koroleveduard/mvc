@@ -7,7 +7,7 @@ use App\Http\Entity\User;
 
 class SessionStorageService
 {
-    public function write(User $user)
+    public function write(User $user): bool
     {
         if (!$this->isOpen()) {
             $this->openSession();
@@ -18,7 +18,7 @@ class SessionStorageService
         return true;
     }
 
-    public function get($key)
+    public function get(string $key)
     {
         if (!$this->isOpen()) {
             $this->openSession();
@@ -27,17 +27,17 @@ class SessionStorageService
         return ArrayHelper::getValue($_SESSION, $key);
     }
 
-    protected function isOpen()
+    protected function isOpen(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
     }
 
-    protected function openSession()
+    protected function openSession(): void
     {
         session_start();
     }
 
-    protected function writeUser(User $user)
+    protected function writeUser(User $user): void
     {
         $session = [];
         $session['id'] = $user->id;
@@ -45,7 +45,16 @@ class SessionStorageService
         $_SESSION['user'] = $session;
     }
 
-    public function close()
+    public function unset(string $key): void
+    {
+        if (!$this->isOpen()) {
+            $this->openSession();
+        }
+
+        unset($_SESSION[$key]);
+    }
+
+    public function close(): void
     {
         session_write_close();
     }

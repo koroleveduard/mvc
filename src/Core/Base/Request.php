@@ -15,7 +15,7 @@ class Request
         $this->postParams = $postParams;
     }
 
-    public static function createFromGlobals()
+    public static function createFromGlobals(): self
     {
         return new self(
             $_SERVER['REQUEST_METHOD'],
@@ -29,7 +29,7 @@ class Request
         return $this->method === 'POST';
     }
 
-    public function post($key, $default = null)
+    public function post($key, $default = null): ?string
     {
         if (isset($this->postParams[$key])) {
             return $this->postParams[$key];

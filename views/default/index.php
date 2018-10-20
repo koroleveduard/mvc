@@ -1,5 +1,6 @@
 <h1>DEFAULT ACTION</h1>
 
+<p><a href="/default/logout">Выйти</a></p>
 <p>Ваш счет: <?=$user->balance;?></p>
 
 <?php if (!empty($errors)) :?>

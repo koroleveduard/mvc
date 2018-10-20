@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\Base\Controller;
 use App\Core\Base\Request;
 use App\Core\Exception\NotFoundException;
 use App\Core\Helper\ArrayHelper;
@@ -16,13 +17,13 @@ class Application extends BaseApplication
         static::$app = $this;
     }
 
-    public function run(array $config = [])
+    public function run(array $config = []): void
     {
         $this->init($config);
         $this->handleRequest();
     }
 
-    private function init($config)
+    private function init(array $config): void
     {
         $components = ArrayHelper::getValue($config, 'components', []);
         $this->definitions = array_merge($this->definitions, $components);
@@ -39,7 +40,7 @@ class Application extends BaseApplication
         echo $responce;
     }
 
-    public function createController($controller)
+    public function createController(string $controller): Controller
     {
         $request = Request::createFromGlobals();
         $controllerName = ucfirst($controller).'Controller';
@@ -49,6 +50,7 @@ class Application extends BaseApplication
             throw new NotFoundException("Controller $controllerClassName is not found!");
         }
 
+        /** @var Controller $instanceController */
         $instanceController = new $controllerClassName();
         $instanceController->setRequest($request);
 

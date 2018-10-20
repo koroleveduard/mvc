@@ -2,12 +2,12 @@
 
 namespace App\Core\Component\Router;
 
-class Router
+class Router implements RouterInterface
 {
     const DEFAULT_CONTROLLER = 'default';
     const DEFAULT_ACTION = 'index';
 
-    public function parseRequest()
+    public function parseRequest(): array
     {
         $pathInfo = trim($_SERVER['REQUEST_URI'], '/');
         if (empty($pathInfo)) {
@@ -27,6 +27,7 @@ class Router
         $result[0] = array_shift($route);
         $result[1] = array_shift($route);
         $result[2] = $route;
+
         return $result;
     }
 }

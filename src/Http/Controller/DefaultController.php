@@ -63,4 +63,10 @@ class DefaultController extends Controller
             'errors' => $errors
         ]);
     }
+
+    public function actionLogout()
+    {
+        $this->authService->logout();
+        $this->redirect('/default/login');
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Core\Base;
 
+use App\Core\Component\Db\DBAdapter;
+use App\Core\Component\Router\RouterInterface;
+
 class Application extends Object
 {
     protected $controllerNamespace = 'App\Http\Controller';
@@ -25,22 +28,22 @@ class Application extends Object
         ],
     ];
 
-    public function getRouter()
+    public function getRouter(): RouterInterface
     {
         return $this->get('router');
     }
 
-    public function getDb()
+    public function getDb(): DBAdapter
     {
         return $this->get('db_driver');
     }
 
-    public function getViewPath()
+    public function getViewPath(): string
     {
         return $this->getBasePath() . 'views';
     }
 
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return ROOT_PATH;
     }

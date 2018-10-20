@@ -3,12 +3,13 @@
 namespace App\Core\Component\Db;
 
 use App\Core\Helper\ArrayHelper;
+use PDO;
 
-class Mysql
+class Mysql implements DBAdapter
 {
     private $connection;
 
-    public function __construct($config)
+    public function __construct(array $config)
     {
         $host = ArrayHelper::getValue($config, 'host', '127.0.0.1');
         $username = ArrayHelper::getValue($config, 'username', null);
@@ -23,7 +24,7 @@ class Mysql
         }
     }
 
-    public function getConnection()
+    public function getConnection(): PDO
     {
         return $this->connection;
     }

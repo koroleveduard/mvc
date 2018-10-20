@@ -15,7 +15,7 @@ class Query
         return $this;
     }
 
-    public function findOneBy($params)
+    public function findOneBy(array $params)
     {
         $columns = ['*'];
         $sql = $this->getSelectQuery($columns, $params);
@@ -36,7 +36,7 @@ class Query
         return $this->model;
     }
 
-    protected function getSelectQuery(array $columns, array $params)
+    protected function getSelectQuery(array $columns, array $params): string
     {
         $tableName = $this->model->getTableName();
         $columns = implode(', ', $columns);
@@ -53,7 +53,7 @@ class Query
         return $sql;
     }
 
-    protected function prepareParams($params)
+    protected function prepareParams(array $params): array
     {
         $result = [];
 

@@ -7,14 +7,14 @@ use App\Core\Application;
 
 class View
 {
-    public function render($layout, $view, $params = [])
+    public function render(string $layout, string $view, array $params = []): string
     {
         $viewFile = $this->findViewFile($view);
         $content = $this->renderFile($viewFile, $params);
         return $this->renderContent($content, $layout);
     }
 
-    public function findViewFile($view)
+    public function findViewFile(string $view): string
     {
         $viewParts = explode('.', $view);
         $viewFile = implode(DIRECTORY_SEPARATOR, $viewParts) . '.php';
@@ -30,13 +30,13 @@ class View
         return $pathView;
     }
 
-    public function renderContent($content, $layout)
+    public function renderContent(string $content, string $layout): string
     {
         $layoutFile = $this->findViewFile($layout);
         return $this->renderFile($layoutFile, ['content' => $content]);
     }
 
-    public function renderFile($viewFile, $params)
+    public function renderFile(string $viewFile, array $params = []): string
     {
         ob_start();
         extract($params, EXTR_OVERWRITE);
