@@ -30,6 +30,11 @@ class Application extends Object
         return $this->get('router');
     }
 
+    public function getDb()
+    {
+        return $this->get('db_driver');
+    }
+
     public function getViewPath()
     {
         return $this->getBasePath() . 'views';

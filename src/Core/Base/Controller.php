@@ -10,6 +10,19 @@ class Controller
 
     protected $layout = 'layout.main';
 
+    protected $request;
+
+
+    public function getRequest(): ?Request
+    {
+        return $this->request;
+    }
+
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function getView()
     {
         if ($this->view === null) {
@@ -26,8 +39,14 @@ class Controller
         }
     }
 
-    public function render($view, $params = [])
+    protected function render($view, $params = [])
     {
         return $this->getView()->render($this->layout, $view, $params);
+    }
+
+    protected function redirect($path)
+    {
+        header("location: $path");
+        exit();
     }
 }

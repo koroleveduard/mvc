@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\Base\Request;
 use App\Core\Exception\NotFoundException;
 use App\Core\Helper\ArrayHelper;
 use App\Core\Base\Application as BaseApplication;
@@ -40,6 +41,7 @@ class Application extends BaseApplication
 
     public function createController($controller)
     {
+        $request = Request::createFromGlobals();
         $controllerName = ucfirst($controller).'Controller';
         $controllerClassName = $this->controllerNamespace.'\\'.$controllerName;
 
@@ -47,6 +49,9 @@ class Application extends BaseApplication
             throw new NotFoundException("Controller $controllerClassName is not found!");
         }
 
-        return new $controllerClassName();
+        $instanceController = new $controllerClassName();
+        $instanceController->setRequest($request);
+
+        return $instanceController;
     }
 }

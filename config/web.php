@@ -8,12 +8,11 @@ return [
         ],
         'db_driver' => [
             'className' => \App\Core\Component\Db\Mysql::class,
-            'options' => []
+            'options' => [
+                'username' => 'root',
+                'password' => 1,
+                'dbname' => 'mvc',
+            ]
         ],
-
-        'view' => [
-            'className' => \App\Core\Component\View\View::class,
-            'options' => []
-        ]
     ]
 ];
