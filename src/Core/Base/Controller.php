@@ -2,6 +2,9 @@
 
 namespace App\Core\Base;
 
+use App\Http\Entity\User;
+use App\Http\Service\AuthService;
+
 class Controller
 {
     const ACTION_PREFIX = 'action';
@@ -13,6 +16,20 @@ class Controller
 
     /** @var  Request */
     protected $request;
+
+    /** @var  AuthService */
+    protected $authService;
+
+    protected $authIsRequired = true;
+    protected $exceptAuth = [];
+
+    /** @var  User */
+    protected $currentUser;
+
+    public function __construct()
+    {
+        $this->authService = new AuthService();
+    }
 
     public function getRequest(): ?Request
     {
@@ -32,22 +49,47 @@ class Controller
         return $this->view;
     }
 
-    public function runAction($action)
+    public function beforeAction(string $action): void
     {
+        $this->currentUser = $this->authService->getIdentity();
+
+        if ($this->isAuthRequired($action)) {
+            if (is_null($this->currentUser)) {
+                $this->redirect('/default/login');
+            }
+        }
+    }
+
+    private function isAuthRequired(string $action): bool
+    {
+        return $this->authIsRequired && !in_array($action, $this->exceptAuth);
+    }
+
+    public function runAction(string $action): string
+    {
+        $this->beforeAction($action);
         $actionName = self::ACTION_PREFIX.ucfirst($action);
-        if (!method_exists($this, $actionName)) {
+        if (!$this->isActionExist($actionName)) {
             throw new \RuntimeException("action $action is not found!");
         }
 
         return $this->$actionName();
     }
 
-    protected function render(string $view, array $params = [])
+    protected function isActionExist(string $name): bool
+    {
+        $methodExists = method_exists($this, $name);
+        $methodIsNotPrivate = !(new \ReflectionMethod($this, $name))->isPrivate();
+
+        return $methodExists && $methodIsNotPrivate;
+    }
+
+    protected function render(string $view, array $params = []): string
     {
         return $this->getView()->render($this->layout, $view, $params);
     }
 
-    protected function redirect(string $path)
+    protected function redirect(string $path): void
     {
         header("location: $path");
         exit();

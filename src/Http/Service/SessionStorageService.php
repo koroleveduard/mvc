@@ -18,6 +18,7 @@ class SessionStorageService
         return true;
     }
 
+    /** @return string|int|array|null|bool Return any scalar type from session*/
     public function get(string $key)
     {
         if (!$this->isOpen()) {
@@ -35,12 +36,13 @@ class SessionStorageService
     protected function openSession(): void
     {
         session_start();
+        session_regenerate_id();
     }
 
     protected function writeUser(User $user): void
     {
         $session = [];
-        $session['id'] = $user->id;
+        $session['id'] = $user->getId();
 
         $_SESSION['user'] = $session;
     }
@@ -57,5 +59,10 @@ class SessionStorageService
     public function close(): void
     {
         session_write_close();
+    }
+
+    public function destroy(): void
+    {
+        session_destroy();
     }
 }

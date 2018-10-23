@@ -9,7 +9,7 @@ use App\Core\Component\Db\Query;
  * @package App\Core\Base
  * @method static findOneBy(array $params):
  */
-class Model
+class Model implements ModelInterface
 {
     protected $table;
 
@@ -31,7 +31,7 @@ class Model
         return $query->$method(...$parameters);
     }
 
-    public function hydrate(array $params)
+    public function hydrate(array $params): void
     {
         foreach ($params as $field => $value) {
             if (property_exists(static::class, $field)) {

@@ -3,19 +3,20 @@
 namespace App\Core\Component\Db;
 
 use App\Core\Application;
+use App\Core\Base\ModelInterface;
 
 class Query
 {
     protected $model;
 
-    public function setModel($model)
+    public function setModel($model): self
     {
         $this->model = $model;
 
         return $this;
     }
 
-    public function findOneBy(array $params)
+    public function findOneBy(array $params): ModelInterface
     {
         $columns = ['*'];
         $sql = $this->getSelectQuery($columns, $params);

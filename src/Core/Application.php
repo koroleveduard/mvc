@@ -10,7 +10,8 @@ use App\Core\Base\Application as BaseApplication;
 
 class Application extends BaseApplication
 {
-    public static $app = null;
+    /** @var null|static */
+    public static $app;
 
     public function __construct()
     {
@@ -25,15 +26,19 @@ class Application extends BaseApplication
 
     private function init(array $config): void
     {
+        $this->setLoggerByConfig($config);
+
+        (new ErrorHandler())->init();
+
         $components = ArrayHelper::getValue($config, 'components', []);
         $this->definitions = array_merge($this->definitions, $components);
     }
 
-    public function handleRequest()
+    public function handleRequest(): void
     {
         $result = $this->getRouter()->parseRequest();
 
-        list($this->requestController,$this->requestAction,$this->requestParams) = $result;
+        list($this->requestController, $this->requestAction, $this->requestParams) = $result;
         $controllerInstance = $this->createController($this->requestController);
         $responce = $controllerInstance->runAction($this->requestAction);
 

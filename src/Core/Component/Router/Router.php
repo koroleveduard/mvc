@@ -2,7 +2,9 @@
 
 namespace App\Core\Component\Router;
 
-class Router implements RouterInterface
+use App\Core\Component\ComponentInterface;
+
+class Router implements RouterInterface, ComponentInterface
 {
     const DEFAULT_CONTROLLER = 'default';
     const DEFAULT_ACTION = 'index';

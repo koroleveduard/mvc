@@ -7,7 +7,7 @@ use App\Http\Entity\User;
 
 class UserService
 {
-    public function writeOff(User $user, $sum): void
+    public function writeOff(User $user, int $sum): void
     {
         $connection = Application::$app->getDb()->getConnection();
 
@@ -25,24 +25,27 @@ class UserService
         $sth = $connection->prepare($sqlUpdate);
         $sth->execute([
             'balance' => $newBalance,
-            'id' => $user->id
+            'id' => $user->getId()
         ]);
 
-        $user->balance = $newBalance;
+        $user->setBalance($newBalance);
 
         $connection->commit();
     }
 
-    protected function getAndLockCurrentBalance(User $user, $connection): int
+    protected function getAndLockCurrentBalance(User $user, \PDO $connection): int
     {
         $sqlBalance = "SELECT balance FROM users WHERE id = :id FOR UPDATE";
         $sth = $connection->prepare($sqlBalance);
         $sth->execute([
-            'id' => $user->id
+            'id' => $user->getId()
         ]);
 
-        $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-        $result = array_shift($result);
+        $result = $sth->fetch(\PDO::FETCH_ASSOC);
+        if (!$result) {
+            throw new \DomainException('С юзером что-то случилось');
+        }
+
         $currentBalance = $result['balance'];
 
         return $currentBalance;

@@ -15,7 +15,7 @@ class AuthService
         $this->session = new SessionStorageService();
     }
 
-    public function login($identity, $credentials): void
+    public function login(string $identity, string $credentials): void
     {
         $user = User::findOneBy([
             'username' => $identity
@@ -33,10 +33,11 @@ class AuthService
         $this->session->close();
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->session->unset('user');
         $this->session->close();
+        $this->session->destroy();
         $this->user = null;
     }
 

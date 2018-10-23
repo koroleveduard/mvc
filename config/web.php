@@ -14,5 +14,6 @@ return [
                 'dbname' => 'mvc',
             ]
         ],
-    ]
+    ],
+    'debug' => 1
 ];

@@ -3,48 +3,45 @@
 namespace App\Http\Controller;
 
 use App\Core\Base\Controller;
-use App\Http\Service\AuthService;
 use App\Http\Service\UserService;
 
 class DefaultController extends Controller
 {
-    /** @var  AuthService */
-    protected $authService;
-
     protected $userService;
+
+    protected $exceptAuth = [ 'login' ];
 
     public function __construct()
     {
-        $this->authService = new AuthService();
         $this->userService = new UserService();
+        parent::__construct();
     }
 
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        $user = $this->authService->getIdentity();
         $errors = [];
-
-        if (is_null($user)) {
-            $this->redirect('/default/login');
-        }
 
         if ($this->getRequest()->isPost()) {
             $sum = (int)$this->getRequest()->post('balance');
             try {
-                $this->userService->writeOff($user, $sum);
+                $this->userService->writeOff($this->currentUser, $sum);
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
 
         return $this->render('default.index', [
-            'user' => $user,
+            'user' => $this->currentUser,
             'errors' => $errors
         ]);
     }
 
-    public function actionLogin()
+    public function actionLogin(): string
     {
+        if (!is_null($this->currentUser)) {
+            $this->redirect('/');
+        }
+
         $errors = [];
 
         if ($this->getRequest()->isPost()) {
@@ -64,7 +61,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionLogout()
+    public function actionLogout(): void
     {
         $this->authService->logout();
         $this->redirect('/default/login');

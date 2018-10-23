@@ -2,7 +2,9 @@
 
 namespace App\Core\Component\Db;
 
+use PDO;
+
 interface DBAdapter
 {
-    public function getConnection();
+    public function getConnection(): PDO;
 }
